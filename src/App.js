@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
-import FacebookProvider from 'react-facebook-sdk';
+import FacebookProvider, { Login } from 'react-facebook-sdk';
 
 class App extends Component {
   handleResponse = (data) => {
