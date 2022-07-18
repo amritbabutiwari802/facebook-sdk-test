@@ -14,7 +14,7 @@ class App extends Component {
 
   render() {
     return (
-      <FacebookProvider appId="343921607951637">
+      <FacebookProvider appId="1506582276387543">
         <Login
           scope="email"
           onResponse={this.handleResponse}
