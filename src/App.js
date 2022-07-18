@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <FacebookProvider appId="343921607951637">
         <Login
-          scope="email"
+          scope="public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata"
           onResponse={this.handleResponse}
           onError={this.handleError}
         >
