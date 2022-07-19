@@ -6,6 +6,21 @@ import FacebookProvider, { Login } from 'react-facebook-sdk';
 class App extends Component {
   handleResponse = (data) => {
     console.log(data);
+    window.FB.api(
+      `/${response.authResponse.userID}/permissions`,
+      "GET",
+      function (permissionResponse) {
+        console.log("granted permission", permissionResponse);
+        window.FB.api(
+          `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
+          "GET",
+          async function (assigendPages) {
+            const allPages = assigendPages.data;
+            console.log(assigendPages);
+          }
+        );
+      }
+    );
   }
  
   handleError = (error) => {
