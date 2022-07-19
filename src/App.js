@@ -15,7 +15,6 @@ class App extends Component {
           `/${data.tokenDetail.userID}/accounts?fields=name&access_token=${data.tokenDetail.accessToken}`,
           "GET",
           async function (assigendPages) {
-            const allPages = assigendPages.data;
             console.log(assigendPages);
           }
         );
