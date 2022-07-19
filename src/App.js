@@ -43,7 +43,7 @@ const App = (props) => {
                     "GET",
                     async function (assigendPages) {
                      
-                      console.log(assigendPages);
+                      console.log(assigendPages,"assigned pages");
                       
 
 
