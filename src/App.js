@@ -58,7 +58,7 @@ const App = (props) => {
         );
       }}
     >
-      FacebookIntegration
+      FacebookIntegr
     </div>
   );
 };
