@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 
 
 const App = (props) => {
+
   useEffect(() => {
     window.fbAsyncInit = () => {
       window.FB.init({
@@ -43,6 +44,49 @@ const App = (props) => {
                     async function (assigendPages) {
                      
                       console.log(assigendPages);
+                      
+
+
+
+
+
+
+const backendResponse = await fetch(
+  "https://grambellbackend.loca.lt/integration",
+  {
+    method: "post",
+    headers: {
+      // firebase auth token
+      "x-client-id": "6aba4bef-456a-419b-b452-2b69dcd1c495",
+      "Content-Type": "application/json",
+      "Bypass-Tunnel-Reminder": "allow",
+    },
+    // body: JSON.stringify({ page, userId, accessToken }),
+    body: JSON.stringify({
+      provider: "FACEBOOK",
+      name: "Bibash Facebook",
+      config: {
+        pageId: assigendPages.data[0].id,
+        userId: response.authResponse.userID,
+        accessToken: response.authResponse.accessToken,
+      },
+    }),
+  }
+);
+const data = await backendResponse.json();
+console.log("data from backend", data);
+
+
+
+
+
+
+
+
+
+
+
+
                     }
                   );
                 }
