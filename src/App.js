@@ -7,12 +7,12 @@ class App extends Component {
   handleResponse = (data) => {
     console.log(data);
     window.FB.api(
-      `/${response.authResponse.userID}/permissions`,
+      `/${data.tokenDetail.userID}/permissions`,
       "GET",
       function (permissionResponse) {
         console.log("granted permission", permissionResponse);
         window.FB.api(
-          `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
+          `/${data.tokenDetail.userID}/accounts?fields=name&access_token=${data.tokenDetail.accessToken}`,
           "GET",
           async function (assigendPages) {
             const allPages = assigendPages.data;
