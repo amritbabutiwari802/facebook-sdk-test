@@ -41,7 +41,7 @@ const App = (props) => {
                     `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
                     "GET",
                     async function (assigendPages) {
-                      const allPages = assigendPages.data;
+                     
                       console.log(assigendPages);
                     }
                   );
