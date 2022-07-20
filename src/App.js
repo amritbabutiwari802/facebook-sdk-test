@@ -58,7 +58,7 @@ const App = (props) => {
                   function (permissionResponse) {
                     console.log("granted permission", permissionResponse);
                     for (let i = 0; i < permissionResponse.data.length; i++) {
-                      if (permissionResponse.data[i].status != "granted") {
+                      if (permissionResponse.data[i].status !== "granted") {
                         breakOperation= true
                         setPermissionStatus(true);
                         break;
@@ -72,7 +72,7 @@ const App = (props) => {
                       "GET",
                       async function (assigendPages) {
                         console.log(assigendPages, "assigned pages");
-                        if (assigendPages.data.length == 0)
+                        if (assigendPages.data.length === 0)
                         {
                           breakOperation = true
                           setPageStatus(true)
