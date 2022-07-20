@@ -141,7 +141,7 @@ export default App;
 
 
 const Menus = (props) =>{
-  return  <Menu onClick={(e)=>{console.log(e.target.value)}}
+  return  <Menu onClick={(e)=>{console.log(e)}}
     items={props.data.map((value)=>( {
         key: value.id,
         label: (
