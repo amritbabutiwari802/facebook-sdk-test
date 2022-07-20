@@ -124,10 +124,7 @@ const App = (props) => {
       {data.ready && (
         <Dropdown overlay={< Menus data={data.data} />}>
           <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              Hover me
-              <DownOutlined />
-            </Space>
+           chose a fb page
           </a>
         </Dropdown>
       )}
