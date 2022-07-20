@@ -7,7 +7,8 @@ const App = (props) => {
   const [permissionNotGranted, setPermissionStatus] = useState(false)
   const [pageNotGranted, setPageStatus] = useState(false);
 
-  const [data ,setdata] = useState({ready:false,data:[]})
+  const [data, setdata] = useState({ ready: false, data: [] })
+  const [selectedPage,setPage] = useState({name:"",id:"",selected:true})
 
   useEffect(() => {
     window.fbAsyncInit = () => {
@@ -121,12 +122,16 @@ const App = (props) => {
           </div>
         </div>
       )}
-      {data.ready && (
-        <Dropdown overlay={< Menus data={data.data} />}>
+      {data.ready && (<>
+        <Dropdown overlay={< Menus data={data.data} onClick={(name,id)=>{setPage({id,name,selected:true})}} />}>
           <a onClick={(e) => e.preventDefault()}>
            chose a fb page
           </a>
         </Dropdown>
+        {selectedPage.selected && <div>
+        You selected {selectedPage.name}
+        </div>}  
+      </>
       )}
     </div>
   );
@@ -143,7 +148,8 @@ const Menus = (props) =>{
           <a target="_blank" rel="noopener noreferrer" >
            {value.name}
           </a>
-        ),
+      ),
+        onClick:props.onClick(value.name, value.id)
       }))}
   />
 }
