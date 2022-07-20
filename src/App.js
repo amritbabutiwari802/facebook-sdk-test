@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-
+import 'antd/dist/antd.css'; 
+import { Dropdown, Menu } from "antd";
 
 
 const App = (props) => {
   const [permissionNotGranted, setPermissionStatus] = useState(false)
   const [pageNotGranted, setPageStatus] = useState(false);
+
+  const [data ,setdata] = useState({ready:false,data:[]})
 
   useEffect(() => {
     window.fbAsyncInit = () => {
@@ -28,60 +31,157 @@ const App = (props) => {
       fjs.parentNode.insertBefore(js, fjs);
     })(document, "script", "facebook-jssdk");
   }, []);
+
+
+
+
+
+
+
+
+
   return (
     <div>
-      {permissionNotGranted && (
-        <p>
-          you didn't frtant all permissions. Permissions are requier to proceed.
-          Click below to regrant permissions
-        </p>
-      )}
-      {pageNotGranted && (
-        <p>
-          you didn't frtant all page permissions. Page Permissions are requier to proceed.
-          Click below to regrant permissions
-        </p>
-      )}
-      <div
-        onClick={() => {
-         var breakOperation=false
-          window.FB.login(
-            function (response) {
-              if (response.authResponse) {
-                console.log(
-                  "Welcome!  Fetching your information.... ",
-                  response
-                );
-                window.FB.api(
-                  `/${response.authResponse.userID}/permissions`,
-                  "GET",
-                  function (permissionResponse) {
-                    console.log("granted permission", permissionResponse);
-                    for (let i = 0; i < permissionResponse.data.length; i++) {
-                      if (permissionResponse.data[i].status !== "granted") {
-                        breakOperation= true
-                        setPermissionStatus(true);
-                        break;
-                      }
-                    }
-                    if (breakOperation) {
-                    return 
-                  }
+      {!data.ready && (
+        <div>
+          {permissionNotGranted && (
+            <p>
+              you didn't frtant all permissions. Permissions are requier to
+              proceed. Click below to regrant permissions
+            </p>
+          )}
+          {pageNotGranted && (
+            <p>
+              you didn't frtant all page permissions. Page Permissions are
+              requier to proceed. Click below to regrant permissions
+            </p>
+          )}
+          <div
+            onClick={() => {
+              var breakOperation = false;
+              window.FB.login(
+                function (response) {
+                  if (response.authResponse) {
+                    console.log(
+                      "Welcome!  Fetching your information.... ",
+                      response
+                    );
                     window.FB.api(
-                      `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
+                      `/${response.authResponse.userID}/permissions`,
                       "GET",
-                      async function (assigendPages) {
-                        console.log(assigendPages, "assigned pages");
-                        if (assigendPages.data.length === 0)
-                        {
-                          breakOperation = true
-                          setPageStatus(true)
+                      function (permissionResponse) {
+                        console.log("granted permission", permissionResponse);
+                        for (
+                          let i = 0;
+                          i < permissionResponse.data.length;
+                          i++
+                        ) {
+                          if (permissionResponse.data[i].status !== "granted") {
+                            breakOperation = true;
+                            setPermissionStatus(true);
+                            break;
                           }
+                        }
+                        if (breakOperation) {
+                          return;
+                        }
+                        window.FB.api(
+                          `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
+                          "GET",
+                          async function (assigendPages) {
+                            console.log(assigendPages, "assigned pages");
+                            if (assigendPages.data.length === 0) {
+                              breakOperation = true;
+                              setPageStatus(true);
+                            }
 
- if (breakOperation) {
-   return;
- }
-                        const backendResponse = await fetch(
+                            if (breakOperation) {
+                              return;
+                            }
+
+                            setdata({ ready: true, data: assigendPages.data });
+                          }
+                        );
+                      }
+                    );
+                  } else {
+                    console.log(
+                      "User cancelled login or did not fully authorize."
+                    );
+                  }
+                },
+                {
+                  scope:
+                    "public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata",
+                }
+              );
+            }}
+          >
+            FacebookIntegr
+          </div>
+        </div>
+      )}
+      {data.ready && (
+        <Dropdown overlay={< Menus data={data.data} />}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              Hover me
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      )}
+    </div>
+  );
+};
+
+export default App;
+
+
+const Menus = (props) =>{
+  return  <Menu
+    items={props.data.map((value)=>( {
+        key: value.id,
+        label: (
+          <a target="_blank" rel="noopener noreferrer" >
+           {value.name}
+          </a>
+        ),
+      }))}
+  />
+}
+
+
+
+
+[
+     
+   
+    ]
+
+
+
+
+/*
+[
+      {
+        key: '1',
+        label: (
+          <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+            1st menu item
+          </a>
+        ),
+      },
+   
+    ]
+ */
+
+
+
+
+
+
+/*     const backendResponse = await fetch(
                           "https://grambellbackend.loca.lt/integration",
                           {
                             method: "post",
@@ -106,25 +206,4 @@ const App = (props) => {
                         );
                         const data = await backendResponse.json();
                         console.log("data from backend", data);
-                      }
-                    );
-                  }
-                );
-              } else {
-                console.log("User cancelled login or did not fully authorize.");
-              }
-            },
-            {
-              scope:
-                "public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata",
-            }
-          );
-        }}
-      >
-        FacebookIntegr
-      </div>
-    </div>
-  );
-};
-
-export default App;
+                      } */
