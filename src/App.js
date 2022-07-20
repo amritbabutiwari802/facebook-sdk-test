@@ -149,7 +149,7 @@ const Menus = (props) =>{
            {value.name}
           </a>
       ),
-        onClick:props.onClick(value.name, value.id)
+       
       }))}
   />
 }
