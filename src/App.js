@@ -122,7 +122,7 @@ const App = (props) => {
           </div>
         </div>
       )}
-      {data.ready && (<>
+      {data.ready && (<div>
         <Dropdown overlay={< Menus data={data.data} onClick={(name,id)=>{setPage({id,name,selected:true})}} />}>
           <a onClick={(e) => e.preventDefault()}>
            chose a fb page
@@ -131,7 +131,7 @@ const App = (props) => {
         {selectedPage.selected && <div>
         You selected {selectedPage.name}
         </div>}  
-      </>
+      </div>
       )}
     </div>
   );
