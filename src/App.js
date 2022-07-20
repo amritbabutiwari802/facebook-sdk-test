@@ -8,7 +8,7 @@ const App = (props) => {
   const [pageNotGranted, setPageStatus] = useState(false);
 
   const [data, setdata] = useState({ ready: false, data: [] })
-  const [selectedPage,setPage] = useState({name:"",id:"",selected:true})
+  const [selectedPage,setPage] = useState({name:"",id:"",selected:false})
 
   useEffect(() => {
     window.fbAsyncInit = () => {
