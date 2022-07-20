@@ -123,7 +123,14 @@ const App = (props) => {
         </div>
       )}
       {data.ready && (<div>
-        <Dropdown overlay={< Menus data={data.data} onClick={(name,id)=>{setPage({id,name,selected:true})}} />}>
+        <Dropdown overlay={< Menus data={data.data} onClick={(id) => {
+          data.data.forEach((value) => {
+            if (value.id === id) {
+               setPage({ id, name:value.name, selected: true });
+            }
+          })
+         
+        }} />}>
           <a onClick={(e) => e.preventDefault()}>
            chose a fb page
           </a>
@@ -141,7 +148,7 @@ export default App;
 
 
 const Menus = (props) =>{
-  return  <Menu onClick={(e)=>{console.log(e)}}
+  return  <Menu onClick={(e)=>{props.onClick(e.key)}}
     items={props.data.map((value)=>( {
         key: value.id,
         label: (
