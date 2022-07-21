@@ -6,7 +6,6 @@ import { Dropdown, Menu } from "antd";
 const App = (props) => {
   const [permissionNotGranted, setPermissionStatus] = useState(false)
   const [pageNotGranted, setPageStatus] = useState(false);
-
   const [data, setdata] = useState({ ready: false, data: [] })
   const [selectedPage,setPage] = useState({name:"",id:"",selected:false})
 
@@ -33,13 +32,56 @@ const App = (props) => {
     })(document, "script", "facebook-jssdk");
   }, []);
 
+  function handleFBLogin() {
+    var breakOperation = false;
+    window.FB.login(
+      function (response) {
+        if (response.authResponse) {
+          console.log("Welcome!  Fetching your information.... ", response);
+          window.FB.api(
+            `/${response.authResponse.userID}/permissions`,
+            "GET",
+            function (permissionResponse) {
+              console.log("granted permission", permissionResponse);
+              for (let i = 0; i < permissionResponse.data.length; i++) {
+                if (permissionResponse.data[i].status !== "granted") {
+                  breakOperation = true;
+                  setPermissionStatus(true);
+                  break;
+                }
+              }
+              if (breakOperation) {
+                return;
+              }
+              window.FB.api(
+                `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
+                "GET",
+                async function (assigendPages) {
+                  console.log(assigendPages, "assigned pages");
+                  if (assigendPages.data.length === 0) {
+                    breakOperation = true;
+                    setPageStatus(true);
+                  }
 
+                  if (breakOperation) {
+                    return;
+                  }
 
-
-
-
-
-
+                  setdata({ ready: true, data: assigendPages.data });
+                }
+              );
+            }
+          );
+        } else {
+          console.log("User cancelled login or did not fully authorize.", response);
+        }
+      },
+      {
+        scope:
+          "public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata",
+      }
+    );
+  }
 
   return (
     <div>
@@ -53,72 +95,14 @@ const App = (props) => {
           )}
           {pageNotGranted && (
             <p>
-              you didn't frtant all page permissions. Page Permissions are
+              you didn't frtant any page permissions. Page Permissions are
               requier to proceed. Click below to regrant permissions
             </p>
           )}
           <div
-            onClick={() => {
-              var breakOperation = false;
-              window.FB.login(
-                function (response) {
-                  if (response.authResponse) {
-                    console.log(
-                      "Welcome!  Fetching your information.... ",
-                      response
-                    );
-                    window.FB.api(
-                      `/${response.authResponse.userID}/permissions`,
-                      "GET",
-                      function (permissionResponse) {
-                        console.log("granted permission", permissionResponse);
-                        for (
-                          let i = 0;
-                          i < permissionResponse.data.length;
-                          i++
-                        ) {
-                          if (permissionResponse.data[i].status !== "granted") {
-                            breakOperation = true;
-                            setPermissionStatus(true);
-                            break;
-                          }
-                        }
-                        if (breakOperation) {
-                          return;
-                        }
-                        window.FB.api(
-                          `/${response.authResponse.userID}/accounts?fields=name&access_token=${response.authResponse.accessToken}`,
-                          "GET",
-                          async function (assigendPages) {
-                            console.log(assigendPages, "assigned pages");
-                            if (assigendPages.data.length === 0) {
-                              breakOperation = true;
-                              setPageStatus(true);
-                            }
-
-                            if (breakOperation) {
-                              return;
-                            }
-
-                            setdata({ ready: true, data: assigendPages.data });
-                          }
-                        );
-                      }
-                    );
-                  } else {
-                    console.log(
-                      "User cancelled login or did not fully authorize."
-                    );
-                  }
-                },
-                {
-                  scope:
-                    "public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata",
-                }
-              );
-            }}
+            onClick={handleFBLogin}
           >
-            FacebookIntegr
+          To Integrate Facebook , Login to facebook by clicking below
           </div>
         </div>
       )}
