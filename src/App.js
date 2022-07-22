@@ -73,12 +73,14 @@ const App = (props) => {
             }
           );
         } else {
-          console.log("User cancelled login or did not fully authorize.", response);
+          console.log(
+            "User cancelled login or did not fully authorize.",
+            response
+          );
         }
       },
       {
-        scope:
-          "public_profile,email,pages_messaging,pages_read_engagement,pages_show_list,pages_manage_metadata",
+        scope: "instagram_basic instagram_manage_messages",
       }
     );
   }
